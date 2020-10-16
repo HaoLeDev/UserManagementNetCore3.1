@@ -52,7 +52,7 @@ namespace User.Data.Infrastructure
 
         public async Task<T> Delete(string id)
         {
-            var entity = await context.Set<T>().FindAsync(id);
+            var entity = await context.Set<T>().FindAsync(Guid.Parse(id));
             if (entity == null)
             {
                 return entity;
@@ -85,7 +85,7 @@ namespace User.Data.Infrastructure
 
         public async Task<T> GetById(string id)
         {
-            return await context.Set<T>().FindAsync(id);
+            return await context.Set<T>().FindAsync(Guid.Parse(id));
         }
 
         public async Task<T> GetById(int id)
