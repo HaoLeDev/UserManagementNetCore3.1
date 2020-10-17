@@ -93,15 +93,46 @@ namespace UserManagerNetCore.Infrastructure.Extensions
             .AddTransient<ICategoryService, CategoryService>();
 
         public static IServiceCollection AddSwagger(this IServiceCollection services)
-            => services.AddSwaggerGen(c =>
+            => services.AddSwaggerGen(s =>
             {
-                c.SwaggerDoc(
-                    "v1",
-                    new OpenApiInfo
+                s.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "User management",
+                    Description = "My Api",
+                    Contact = new OpenApiContact
                     {
-                        Title = "User manager API",
-                        Version = "v1"
-                    });
+                        Name = "Lê Vĩnh Hảo",
+                        Email = "vinhhao2604@gmail.com",
+                        Url = new Uri("https://Fb.com/haole2604")
+                    }
+                });
+
+                s.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme (Example: 'Bearer 12345abcdef')",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                s.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        },
+                       Scheme="Bearer",
+                       Name="Bearer"
+                    },
+                    new List<string>()
+                }
+            });
             });
 
         public static void AddApiControllers(this IServiceCollection services)
