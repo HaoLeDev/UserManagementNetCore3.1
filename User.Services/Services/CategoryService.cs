@@ -43,7 +43,7 @@ namespace User.Services.Services
         public async Task<IEnumerable<Category>> GetAll(string keyword)
         {
             if (!string.IsNullOrEmpty(keyword))
-                return await _categoryRepository.GetAllByCondition(x => x.CategoryName == keyword);
+                return await _categoryRepository.GetAllByCondition(x => x.CategoryName.Contains( keyword));
             return await _categoryRepository.GetAll();
         }
 

@@ -85,12 +85,15 @@ namespace UserManagerNetCore.Infrastructure.Extensions
 
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
             => services
-            .AddTransient<ICategoryRepository,CategoryRepository>()
+            .AddTransient<ICategoryRepository, CategoryRepository>()
+            .AddTransient<ICustomerRepository, CustomerRepository>()
                  .AddScoped<ICurrentUserService, CurrentUserService>()
                 .AddTransient<IIdentityService, IdentityService>()
                 .AddTransient<IProfileService, ProfileService>()
                 .AddTransient<ISearchService, SearchService>()
-            .AddTransient<ICategoryService, CategoryService>();
+            .AddTransient<ICategoryService, CategoryService>()
+            .AddTransient<ICustomerService, CustomerService>();
+
 
         public static IServiceCollection AddSwagger(this IServiceCollection services)
             => services.AddSwaggerGen(s =>

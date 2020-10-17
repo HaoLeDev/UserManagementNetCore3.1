@@ -13,6 +13,7 @@ namespace UserManagerNetCore.Infrastructure.Extensions
         public AutoMapperProfile()
         {
             CreateMap<Category,CategoryViewModel>();
+            CreateMap<Customer, CustomerViewModel>();
         }
     }
 }

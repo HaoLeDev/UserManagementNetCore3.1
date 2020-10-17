@@ -32,14 +32,18 @@ namespace UserManagerNetCore.Controllers
 
         [HttpGet]
         [Route(nameof(Get))]
-        public async Task<ActionResult<IEnumerable<CategoryViewModel>>> Get()
+        public async Task<ActionResult> Get(int page=0, int pageSize=10, string keyword=null)
         {
             try
             {
-                var model = await _categoryService.GetAll();
-                var query = model.OrderByDescending(x => x.CreatedDate);
+                int totalRecord = 0;
+                var model = await _categoryService.GetAll(keyword);
+                var query = model.OrderByDescending(x => x.CreatedDate).Skip(page*pageSize).Take(pageSize);
                 var responseData = _mapper.Map<IEnumerable<Category>, IEnumerable<CategoryViewModel>>(query).ToList();
-                return responseData;
+                totalRecord = model.Count();
+
+                var paginationSet = new PagedResponse<CategoryViewModel>(responseData, page, pageSize, totalRecord);
+                return Ok(paginationSet);
             }
             catch (Exception ex)
             {

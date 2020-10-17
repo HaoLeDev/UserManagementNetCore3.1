@@ -21,5 +21,20 @@ namespace UserManagerNetCore.Infrastructure.Filters
             category.UpdatedBy = categoryViewModel.UpdatedBy;
             category.UpdatedDate = categoryViewModel.UpdatedDate;
         }
+
+        public static void UpdateCustomer(this Customer customer, CustomerViewModel customerViewModel)
+        {
+            customer.FirstName = customerViewModel.FirstName;
+            customer.LastName = customerViewModel.LastName;
+            customer.CreatedBy = customerViewModel.CreatedBy;
+            customer.CreatedDate = customerViewModel.CreatedDate;
+            customer.Deleted = customerViewModel.Deleted;
+            customer.Id = customerViewModel.Id;
+            customer.UpdatedBy = customerViewModel.UpdatedBy;
+            customer.UpdatedDate = customerViewModel.UpdatedDate;
+            customer.Address = customerViewModel.Address;
+            customer.Gender = customerViewModel.Gender;
+            customer.Phone = customerViewModel.Phone;
+        }
     }
 }
