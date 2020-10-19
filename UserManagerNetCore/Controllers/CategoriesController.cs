@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
@@ -75,7 +76,7 @@ namespace UserManagerNetCore.Controllers
 
         [HttpPost]
         [Route(nameof(Post))]
-        public async Task<ActionResult<CategoryViewModel>> Post(Category model)
+        public async Task<ActionResult<CategoryViewModel>> Post(CategoryViewModel viewModel)
         {
             try
             {
@@ -83,13 +84,15 @@ namespace UserManagerNetCore.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-
-                model.CreatedBy = _currentUserService.GetId();
-                model.CreatedDate = DateTime.Now;
-                model.Deleted = false;
-                var result= await _categoryService.Add(model);
-                
-                return CreatedAtAction("Get", new { id = model.Id }, model);
+                Category model = new Category();
+                viewModel.CreatedBy = _currentUserService.GetId();
+                viewModel.CreatedDate = DateTime.Now;
+                viewModel.Deleted = false;
+                model.UpdateCategory(viewModel);
+                var result = await _categoryService.Add(model);
+                var response = _mapper.Map<Category, CategoryViewModel>(result);
+                var resultFilter = new ResultFilter<CategoryViewModel>(response, StatusCodes.Status201Created, null);
+                return Ok(resultFilter);
             }
             catch(Exception ex)
             {
@@ -116,7 +119,9 @@ namespace UserManagerNetCore.Controllers
                 viewModel.Deleted = false;
                 model.UpdateCategory(viewModel);
                 var result = await _categoryService.Update(model);
-                return CreatedAtAction("Get", new { id = viewModel.Id }, model);
+                var response = _mapper.Map<Category, CategoryViewModel>(result);
+                var resultFilter = new ResultFilter<CategoryViewModel>(response, StatusCodes.Status201Created, null);
+                return Ok(resultFilter);
             }
             catch (Exception ex)
             {
@@ -126,13 +131,14 @@ namespace UserManagerNetCore.Controllers
 
         [HttpDelete]
         [Route(nameof(Delete))]
-        public async Task<ActionResult<CategoryViewModel>> Delete(string id)
+        public async Task<ActionResult> Delete(string id)
         {
             try
             {
                 var result = await _categoryService.Delete(id);
                 var respone = _mapper.Map<Category, CategoryViewModel>(result);
-                return respone;
+                var resultFilter = new ResultFilter<CategoryViewModel>(respone, StatusCodes.Status200OK, null);
+                return Ok(resultFilter);
             }
             catch(Exception ex)
             {

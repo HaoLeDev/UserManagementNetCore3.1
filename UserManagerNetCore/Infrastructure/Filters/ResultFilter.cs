@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace UserManagerNetCore.Infrastructure.Filters
 {
-    public class FilterResult<T>
+    public class ResultFilter<T>
     {
-        public FilterResult(T data, int statusCode, string[]error)
+        public ResultFilter(T data, int statusCode, string error)
         {
             Data = data;
-            this.statusCode = statusCode;
+            this.StatusCode = statusCode;
             this.Errors = error;
         }
 
@@ -20,9 +20,9 @@ namespace UserManagerNetCore.Infrastructure.Filters
                 if (Errors != null) return false;
                 else return true;} 
         }
-        public string[] Errors { get; set; }
-        public string Message { get; set; }
-        public int statusCode { get; set; }
+        public string Errors { get; set; }
+       // public string Message { get; set; }
+        public int StatusCode { get; set; }
         public T Data { get; set; }
     }
 }

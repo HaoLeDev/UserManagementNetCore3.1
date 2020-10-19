@@ -1,10 +1,10 @@
-﻿using System;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using User.Commons.Services;
 using User.Models.Models;
 using User.Services.Services;
@@ -47,12 +47,11 @@ namespace UserManagerNetCore.Controllers
             {
                 return BadRequest(ex);
             }
-
         }
 
         [HttpGet]
         [Route("GetById/{id}")]
-        public async Task<ActionResult<CustomerViewModel>> Get(string id)
+        public async Task<ActionResult> Get(string id)
         {
             try
             {
@@ -62,18 +61,17 @@ namespace UserManagerNetCore.Controllers
                     return NoContent();
                 }
                 var respone = _mapper.Map<Customer, CustomerViewModel>(model);
-                return respone;
+                return Ok(respone);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex);
             }
-
         }
 
         [HttpPost]
         [Route(nameof(Post))]
-        public async Task<ActionResult<CustomerViewModel>> Post(Customer model)
+        public async Task<ActionResult> Post(CustomerViewModel viewModel)
         {
             try
             {
@@ -82,35 +80,21 @@ namespace UserManagerNetCore.Controllers
                     return BadRequest(ModelState);
                 }
 
-                for(int i=1; i <= 10000; i++)
-                {
-
-                     model = new Customer();
-                    model.FirstName = "Khách hàng ";
-                    model.LastName = i.ToString();
-                    if (i % 2 == 0)
-                        model.Gender = false;
-                    else
-                        model.Gender = true;
-                    model.CreatedBy = _currentUserService.GetId();
-                    model.CreatedDate = DateTime.Now;
-                    model.Deleted = false;
-                    var result = await _customerService.Add(model);
-                }
-
-                //model.CreatedBy = _currentUserService.GetId();
-                //model.CreatedDate = DateTime.Now;
-                //model.Deleted = false;
-                //var result = await _customerService.Add(model);
-                return Ok("Thêm mới thành công.");
-                //return CreatedAtAction("Get", new { id = model.Id }, model);
+                Customer model = new Customer();
+                viewModel.CreatedBy = _currentUserService.GetId();
+                viewModel.CreatedDate = DateTime.Now;
+                viewModel.Deleted = false;
+                model.UpdateCustomer(viewModel);
+                var result = await _customerService.Add(model);
+                var response = _mapper.Map<Customer, CustomerViewModel>(result);
+                var resultFilter = new ResultFilter<CustomerViewModel>(response, StatusCodes.Status201Created, null);
+                return Ok(resultFilter);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex);
             }
         }
-
 
         [HttpPut]
         [Route(nameof(Put))]
@@ -130,7 +114,9 @@ namespace UserManagerNetCore.Controllers
                 viewModel.Deleted = false;
                 model.UpdateCustomer(viewModel);
                 var result = await _customerService.Update(model);
-                return CreatedAtAction("Get", new { id = viewModel.Id }, model);
+                var response = _mapper.Map<Customer, CustomerViewModel>(result);
+                var resultFilter = new ResultFilter<CustomerViewModel>(response, StatusCodes.Status201Created, null);
+                return Ok(resultFilter);
             }
             catch (Exception ex)
             {
@@ -145,8 +131,9 @@ namespace UserManagerNetCore.Controllers
             try
             {
                 var result = await _customerService.Delete(id);
-                var respone = _mapper.Map<Customer, CustomerViewModel>(result);
-                return respone;
+                var response = _mapper.Map<Customer, CustomerViewModel>(result);
+                var resultFilter = new ResultFilter<CustomerViewModel>(response, StatusCodes.Status200OK, null);
+                return Ok(resultFilter);
             }
             catch (Exception ex)
             {

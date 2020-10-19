@@ -25,7 +25,7 @@ namespace UserManagerNetCore.Infrastructure.Filters
         public bool Succeeded { get; set; }
         public string[] Errors { get; set; }
         public string Message { get; set; }
-        public int statusCode { get { return Microsoft.AspNetCore.Http.StatusCodes.Status200OK; } }
+        public int StatusCode { get { return Microsoft.AspNetCore.Http.StatusCodes.Status200OK; } }
         public IEnumerable<T> Data { get; set; }
     }
 }

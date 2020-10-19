@@ -26,7 +26,7 @@ namespace UserManagerNetCore
                        .AddIdentity()
                        .AddJwtAuthentication(services.GetApplicationSettings(this.Configuration))
                        .AddApplicationServices()
-                       .AddSwagger()
+                       .AddSwagger()         
                        .AddAutoMapper(typeof(AutoMapperProfile).Assembly)
             .AddControllers().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
