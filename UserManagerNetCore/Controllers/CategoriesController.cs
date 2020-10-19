@@ -12,6 +12,7 @@ using User.Commons.Services;
 using User.Models.Models;
 using User.Services.Services;
 using User.ViewModels.ViewModels;
+using UserManagerNetCore.Infrastructure.Core;
 using UserManagerNetCore.Infrastructure.Filters;
 
 namespace UserManagerNetCore.Controllers

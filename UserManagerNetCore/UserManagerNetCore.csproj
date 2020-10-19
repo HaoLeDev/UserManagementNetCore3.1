@@ -19,8 +19,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AspNetCore.CacheOutput" Version="1.0.11.1" />
+    <PackageReference Include="AspNetCore.CacheOutput.InMemory" Version="1.0.6.1" />
     <PackageReference Include="AutoMapper" Version="10.1.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.7" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.9" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.9" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />

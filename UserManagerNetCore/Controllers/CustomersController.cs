@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using AspNetCore.CacheOutput;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,6 +10,7 @@ using User.Commons.Services;
 using User.Models.Models;
 using User.Services.Services;
 using User.ViewModels.ViewModels;
+using UserManagerNetCore.Infrastructure.Core;
 using UserManagerNetCore.Infrastructure.Filters;
 
 namespace UserManagerNetCore.Controllers
@@ -30,6 +32,7 @@ namespace UserManagerNetCore.Controllers
 
         [HttpGet]
         [Route(nameof(Get))]
+        [CacheOutput(ClientTimeSpan = 3600, ServerTimeSpan = 3600)]
         public async Task<ActionResult> Get(int page = 0, int pageSize = 10, string keyword = null)
         {
             try
@@ -51,6 +54,7 @@ namespace UserManagerNetCore.Controllers
 
         [HttpGet]
         [Route("GetById/{id}")]
+        //[CacheOutput(ClientTimeSpan = 3600, ServerTimeSpan = 3600)]
         public async Task<ActionResult> Get(string id)
         {
             try
@@ -71,6 +75,7 @@ namespace UserManagerNetCore.Controllers
 
         [HttpPost]
         [Route(nameof(Post))]
+        [InvalidateCacheOutput(nameof(Get))]
         public async Task<ActionResult> Post(CustomerViewModel viewModel)
         {
             try
@@ -98,6 +103,7 @@ namespace UserManagerNetCore.Controllers
 
         [HttpPut]
         [Route(nameof(Put))]
+        [InvalidateCacheOutput(nameof(Get))]
         public async Task<ActionResult<CustomerViewModel>> Put(CustomerViewModel viewModel)
         {
             try
@@ -106,8 +112,6 @@ namespace UserManagerNetCore.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                // var model = _customerService.GetById(viewModel.Id.ToString());
-
                 Customer model = new Customer();
                 viewModel.UpdatedBy = _currentUserService.GetId();
                 viewModel.UpdatedDate = DateTime.Now;
@@ -126,6 +130,7 @@ namespace UserManagerNetCore.Controllers
 
         [HttpDelete]
         [Route(nameof(Delete))]
+        [InvalidateCacheOutput(nameof(Get))]
         public async Task<ActionResult<CustomerViewModel>> Delete(string id)
         {
             try

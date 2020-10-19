@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using User.Services.IServices;
 using User.ViewModels.SearchModels;
+using UserManagerNetCore.Infrastructure.Core;
 
 namespace UserManagerNetCore.Controllers
 {
